@@ -86,5 +86,127 @@
 
     }
 
-  
+    if($method == "POST"){
+        //Recupera dados do corpo (body) de uma requisição POST
+        $dados = file_get_contents("php://input");
+
+        //Decodifica JSON, sem opção TRUE
+        $dados = json_decode($dados);  //Isso retorna um OBJETO
+
+        //Função TRIM retira espaços que estão sobrando
+        $categoria = trim($dados->categoria);   //Acessa o valor de um OBJETO 
+
+        try {
+            if(empty($categoria)){
+                //Está vazio ou não é númerico: ERRO
+                throw new ErrorException("Valor inválido", 1);
+            }
+
+            $sql = "INSERT INTO categoria(categoria) 
+                    VALUES (:categoria)";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(":categoria", $categoria);
+            $stmt->execute();
+
+            $result = array("status"=>"success");
+        } 
+        
+        catch (PDOException $ex) {
+            $result = ["status"=> "fail", "Error"=> $ex->getMessage()];
+                http_response_code(200);
+            }
+            catch(Exception $ex){
+                $result = ["status"=> "fail", "Error"=> $ex->getMessage()];
+                http_response_code(200);
+            }
+            finally{
+                $conn = null;
+                echo json_encode($result);
+            }
+    }
+
+    if($method == "PUT"){
+        //Recupera dados do corpo (body) de uma requisição PUT
+        $dados = file_get_contents("php://input");
+
+        //Decodifica JSON, sem opção TRUE
+        $dados = json_decode($dados);
+        //Isso retorna um OBJETO
+        try {
+
+            if(empty($dados->categoria)){
+                //Está vazio: ERRO
+                throw new ErrorException("Categoria é um campo obrigatório", 1);
+            }
+
+            if(empty($dados->id)){
+                //Está vazio: ERRO
+                throw new ErrorException("ID inválido", 1);
+            }
+
+            //Função TRIM retira espaços que estão sobrando
+            $categoria = trim($dados->categoria);  //Acessa o valor de um OBJETO 
+            $id = trim($dados->id);
+
+            $sql = "UPDATE categoria 
+                    SET categoria=:categoria 
+                    WHERE pk_categoria=:id";
+
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(":categoria", $categoria);
+            $stmt->bindParam(":id", $id);
+            $stmt->execute();
+
+            $result = array("status"=>"success");
+        } 
+        
+        catch (PDOException $ex) {
+            $result = ["status"=> "fail", "Error"=> $ex->getMessage()];
+                http_response_code(200);
+            }
+            catch(Exception $ex){
+                $result = ["status"=> "fail", "Error"=> $ex->getMessage()];
+                http_response_code(200);
+            }
+            finally{
+                $conn = null;
+                echo json_encode($result);
+            }
+    }
+
+    if($method == "DELETE"){
+            try{
+                if(empty($_GET["id"]) || !is_numeric($_GET["id"])){
+                //Está vazio ou não é númerico: ERRO
+                throw new ErrorException("Valor inválido", 1);
+                }
+
+                $id = $_GET["id"];
+
+                $sql = "DELETE FROM categoria 
+                        WHERE pk_categoria=:id";
+
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(":id", $id);
+                $stmt->execute();
+
+                $result["status"] = "success";
+            }
+            
+            catch (PDOException $ex) {
+                $result = ["status"=> "fail", "Error"=> $ex->getMessage()];
+                http_response_code(200);
+            }
+
+            catch(Exception $ex){
+                $result = ["status"=> "fail", "Error"=> $ex->getMessage()];
+                http_response_code(200);
+            }
+
+            finally{
+                $conn = null;
+                echo json_encode($result);
+            }
+    }
 ?>

@@ -16,7 +16,9 @@
 
             //Listar todos os registros
             try {
-                $sql = "SELECT pk_produto, img, desc_produto, produto.nome, valor, marca.marca, cor.cor, tamanho.tamanho, genero.genero, categoria.categoria, 
+
+                if(!isset($_GET["genero"])) {
+                    $sql = "SELECT pk_produto, img, desc_produto, produto.nome, valor, marca.marca, cor.cor, tamanho.tamanho, genero.genero, categoria.categoria, 
                                 subcategoria.sub_categoria, fk_marca, fk_categoria, fk_cor, fk_tamanho, fk_genero, fk_subcategoria 
                         FROM produto 
                         JOIN marca ON pk_marca = produto.fk_marca
@@ -26,24 +28,62 @@
                         JOIN tamanho ON pk_tamanho = produto.fk_tamanho
                         JOIN subcategoria ON pk_subcategoria = produto.fk_subcategoria";
             
-                // $sql = "SELECT pk_produto, img, produto.nome,desc_produto, valor, marca.nome marca, genero.genero, categoria.categoria, subcategoria.sub_categoria
-                // FROM produto
-                // JOIN marca ON fk_marca = pk_marca
-                // JOIN genero ON fk_genero = pk_genero
-                // JOIN categoria ON fk_categoria = pk_categoria
-                // JOIN subcategoria ON fk_subcategoria = pk_subcategoria;";
-                $stmt = $conn->prepare($sql);
-                $stmt->execute();
-                
-                $dados = $stmt->fetchall(PDO::FETCH_OBJ);
-                // echo "<pre>";
-                // var_dump($dados);
-                // echo "</pre>"; 
-                // exit;
-                $result["produtos"]=$dados;
-                $result["status"] = "success";
+                    // $sql = "SELECT pk_produto, img, produto.nome,desc_produto, valor, marca.nome marca, genero.genero, categoria.categoria, subcategoria.sub_categoria
+                    // FROM produto
+                    // JOIN marca ON fk_marca = pk_marca
+                    // JOIN genero ON fk_genero = pk_genero
+                    // JOIN categoria ON fk_categoria = pk_categoria
+                    // JOIN subcategoria ON fk_subcategoria = pk_subcategoria;";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute();
+                    
+                    $dados = $stmt->fetchall(PDO::FETCH_OBJ);
+                    // echo "<pre>";
+                    // var_dump($dados);
+                    // echo "</pre>"; 
+                    // exit;
+                    $result["produtos"]=$dados;
+                    $result["status"] = "success";
 
-                http_response_code(200);
+                    http_response_code(200);
+                } else {
+
+                    $genero = $_GET["genero"];
+
+                    $sql = "SELECT pk_produto, img, desc_produto, produto.nome, valor, marca.marca, cor.cor, tamanho.tamanho, genero.genero, categoria.categoria, 
+                                subcategoria.sub_categoria, fk_marca, fk_categoria, fk_cor, fk_tamanho, fk_genero, fk_subcategoria 
+                        FROM produto 
+                        JOIN marca ON pk_marca = produto.fk_marca
+                        JOIN genero ON pk_genero = produto.fk_genero
+                        JOIN categoria ON pk_categoria = produto.fk_categoria
+                        JOIN cor ON pk_cor = produto.fk_cor
+                        JOIN tamanho ON pk_tamanho = produto.fk_tamanho
+                        JOIN subcategoria ON pk_subcategoria = produto.fk_subcategoria
+                        WHERE genero.genero = :genero
+                        ";
+            
+                    // $sql = "SELECT pk_produto, img, produto.nome,desc_produto, valor, marca.nome marca, genero.genero, categoria.categoria, subcategoria.sub_categoria
+                    // FROM produto
+                    // JOIN marca ON fk_marca = pk_marca
+                    // JOIN genero ON fk_genero = pk_genero
+                    // JOIN categoria ON fk_categoria = pk_categoria
+                    // JOIN subcategoria ON fk_subcategoria = pk_subcategoria;";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(":genero", $genero);
+                    $stmt->execute();
+                    
+                    $dados = $stmt->fetchall(PDO::FETCH_OBJ);
+                    // echo "<pre>";
+                    // var_dump($dados);
+                    // echo "</pre>"; 
+                    // exit;
+                    $result["produtos"]=$dados;
+                    $result["status"] = "success";
+
+                    http_response_code(200);
+                }
+
+                
             } 
 
             catch (PDOException $ex) {
@@ -181,10 +221,10 @@
         //Isso retorna um OBJETO
         try {
 
-            if(empty($dados->img)){
-                //Está vazio: ERRO
-                throw new ErrorException("Imagem é um campo obrigatório", 1);
-            }
+            // if(empty($dados->img)){
+            //     //Está vazio: ERRO
+            //     throw new ErrorException("Imagem é um campo obrigatório", 1);
+            // }
 
             if(empty($dados->nome)){
                 //Está vazio: ERRO
@@ -245,7 +285,7 @@
             $id = trim($dados->id);
 
             $sql = "UPDATE produto 
-                    SET img=:img, desc_produto=:desc_produto, nome=:nome, valor=:valor, fk_marca=:marca, fk_genero=:genero, fk_categoria=:categoria, fk_cor=:cor, fk_tamanho=:tamanho, fk_subcategoria=:subcategoria 
+                    SET desc_produto=:desc_produto, nome=:nome, img=:img,valor=:valor, fk_marca=:marca, fk_genero=:genero, fk_categoria=:categoria, fk_cor=:cor, fk_tamanho=:tamanho, fk_subcategoria=:subcategoria 
                     WHERE pk_produto=:id";
 
             $stmt = $conn->prepare($sql);

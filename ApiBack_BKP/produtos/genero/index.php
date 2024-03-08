@@ -6,7 +6,7 @@
 
     $method = $_SERVER["REQUEST_METHOD"];
 
-    include("../../connection/connection.php");
+    include("../.././connection/connection.php");
     include("../../valida_token.php");
 
     if($method == "GET"){
