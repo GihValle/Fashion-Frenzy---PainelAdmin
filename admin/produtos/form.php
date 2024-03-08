@@ -272,12 +272,12 @@
                     <div class="form-group">
                       
                       <?php if ($img) { ?>
-                        <div style="width: 200px; height: 200px;">
+                        <div class="col-4 mb-5" style="width: 200px; height: 200px;">
                           <img src="<?php echo $img; ?>" alt="" class="img-fluid">
                         </div>
                       <?php } ?>
-                      
-                      <label for="imagem">Imagens</label>
+
+                      <label class="col-4 mt-5" for="imagem">Imagens</label>
                       <input type="file" id="imagem" name="imagem" value="" class="form-control" placeholder="Imagem do Produto">
                     </div>
 
