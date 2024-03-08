@@ -181,10 +181,10 @@
         //Isso retorna um OBJETO
         try {
 
-            // if(empty($dados->img)){
-            //     //Está vazio: ERRO
-            //     throw new ErrorException("Imagem é um campo obrigatório", 1);
-            // }
+            if(empty($dados->img)){
+                //Está vazio: ERRO
+                throw new ErrorException("Imagem é um campo obrigatório", 1);
+            }
 
             if(empty($dados->nome)){
                 //Está vazio: ERRO
@@ -232,7 +232,7 @@
             }
 
             //Função TRIM retira espaços que estão sobrando  //Acessa o valor de um OBJETO 
-            // $img = trim($dados->img);
+            $img = trim($dados->img);
             $desc_produto = trim($dados->desc_produto); 
             $nome = trim($dados->nome);  
             $valor = trim($dados->valor); 
@@ -245,12 +245,12 @@
             $id = trim($dados->id);
 
             $sql = "UPDATE produto 
-                    SET desc_produto=:desc_produto, nome=:nome, valor=:valor, fk_marca=:marca, fk_genero=:genero, fk_categoria=:categoria, fk_cor=:cor, fk_tamanho=:tamanho, fk_subcategoria=:subcategoria 
+                    SET img=:img, desc_produto=:desc_produto, nome=:nome, valor=:valor, fk_marca=:marca, fk_genero=:genero, fk_categoria=:categoria, fk_cor=:cor, fk_tamanho=:tamanho, fk_subcategoria=:subcategoria 
                     WHERE pk_produto=:id";
 
             $stmt = $conn->prepare($sql);
 
-            // $stmt->bindParam(":img", $img);
+            $stmt->bindParam(":img", $img);
             $stmt->bindParam(":desc_produto", $desc_produto);
             $stmt->bindParam(":nome", $nome);
             $stmt->bindParam(":valor", $valor);

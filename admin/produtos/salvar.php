@@ -34,10 +34,12 @@
             }        
         }else{
             $caminho_relativo="";
+            echo "err";
+            exit;
         }
 
-        $img = $caminho_relativo;
-
+        echo $img = $caminho_relativo;
+        
         if(empty($nome)){
             $msg = "Campo Nome é obrigatório";
             $status = 'fail';

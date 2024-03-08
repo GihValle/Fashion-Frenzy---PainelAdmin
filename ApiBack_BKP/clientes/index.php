@@ -162,15 +162,15 @@
                 throw new ErrorException("Endereço inválido", 1);
             }
 
-            if(empty($email)){
-                //Está vazio ou não é númerico: ERRO
-                throw new ErrorException("Email inválido", 1);
-            }
+            // if(empty($email)){
+            //     //Está vazio ou não é númerico: ERRO
+            //     throw new ErrorException("Email inválido", 1);
+            // }
 
-            if(empty($senha)){
-                //Está vazio ou não é númerico: ERRO
-                throw new ErrorException("Senha inválida", 1);
-            }
+            // if(empty($senha)){
+            //     //Está vazio ou não é númerico: ERRO
+            //     throw new ErrorException("Senha inválida", 1);
+            // }
 
             $sql = "INSERT INTO cliente(nome, cpf, tel, endereco) 
                     VALUES (:nome, :cpf, :tel, :endereco)";
@@ -180,8 +180,8 @@
             $stmt->bindParam(":cpf", $cpf);
             $stmt->bindParam(":tel", $tel);
             $stmt->bindParam(":endereco", $endereco);
-            $stmt->bindParam(":email", $email);
-            $stmt->bindParam(":senha", $senha);
+            // $stmt->bindParam(":email", $email);
+            // $stmt->bindParam(":senha", $senha);
             $stmt->execute();
 
             $result = array("status"=>"success");

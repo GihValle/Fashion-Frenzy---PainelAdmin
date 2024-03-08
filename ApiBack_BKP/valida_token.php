@@ -1,9 +1,7 @@
 <?php
 // include("../connection/connection.php");
-$headers = apache_request_headers();
 
-// if(!isset($_SERVER['HTTP_ACCESSTOKEN']) || empty($_SERVER['HTTP_ACCESSTOKEN'])){
-if(!isset($headers["Authorization"]) || empty($headers["Authorization"])){
+if(!isset($_SERVER['HTTP_ACCESSTOKEN']) || empty($_SERVER['HTTP_ACCESSTOKEN'])){
         //trata o erro
         //Se a variável HTTP_ACCESSTOKEN não existe ou está vazia
         $result = ["status"=> "fail", "Error"=> "Token Error"];
@@ -12,7 +10,7 @@ if(!isset($headers["Authorization"]) || empty($headers["Authorization"])){
         exit;
     }
 
-    $acess_token = $headers["Authorization"];
+    $acess_token = $_SERVER['HTTP_ACCESSTOKEN'];
 
     //Passo 1 - Consultar banco verifica se token existe
     $sql = "SELECT pk_id, email, cpf 
