@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "C:/xampp/htdocs/api_back"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "app01"
+	}
+}
